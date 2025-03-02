@@ -1,0 +1,8 @@
+fastapi==0.115.10
+google-generativeai==0.8.4
+groq==0.18.0
+grpcio-status==1.70.0
+motor==3.7.0
+openai==1.65.2
+pip==24.0
+pydantic-settings==2.8.1
