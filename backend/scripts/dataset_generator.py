@@ -203,7 +203,7 @@ def main():
 
     for city in cities:
         destination = generate_destination_data(city)
-        all_destinations.append(destination.to_dict())
+        all_destinations.append(destination.to_model_dump())
 
         # Delay to prevent rate limiting
         time.sleep(1)

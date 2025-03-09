@@ -1,0 +1,36 @@
+name: Deploy Backend to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Build and Push Backend Image
+        working-directory: backend
+        run: |
+          gcloud builds submit --tag asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/globetrotter-images/globetrotter-backend .
+
+      - name: Deploy Backend Service
+        run: |
+          gcloud run deploy globetrotter-backend \
+            --image asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/globetrotter-images/globetrotter-backend \
+            --region asia-south1 \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 8000 \
+            --set-env-vars MONGODB_URI=${{ secrets.MONGODB_URI }} # Pass the secret

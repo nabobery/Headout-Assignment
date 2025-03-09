@@ -13,8 +13,9 @@ This is the backend API for the Globetrotter travel quiz game.
 
 - Python 3.8+
 - FastAPI
-- SQLAlchemy ORM
-- SQLite (development) / PostgreSQL (production)
+- MongoDB (asynchronous with Motor)
+- Pydantic for data validation
+- Motor for asynchronous MongoDB operations
 
 ## Installation
 
@@ -33,20 +34,21 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Set up environment variables (optional)
+4. Set up environment variables
+
+Create a `.env` file with the following variables:
 
 ```bash
-# Create a .env file with the following variables
-DATABASE_URL=sqlite:///./globetrotter.db  # Or your PostgreSQL URL
+MONGO_DB_URI=mongodb://username:password@localhost:27017/travel_destinations  # Replace with your MongoDB URI
 SECRET_KEY=your_secret_key
 ```
 
 ## Running the Application
 
-1. Start the FastAPI server
+1. Start the FastAPI server using `main.py`:
 
 ```bash
-uvicorn app.main:app --reload
+python app/main.py
 ```
 
 2. Access the API documentation
@@ -90,69 +92,3 @@ python scripts/load_destinations.py destinations.json
 
 - Run tests: `pytest` (requires pytest to be installed)
 - Format code: `black app/` (requires black to be installed)
-
-
-globetrotter/
-├── backend/                      # FastAPI backend
-│   ├── app/
-│   │   ├── __init__.py
-│   │   ├── main.py              # FastAPI entry point
-│   │   ├── api/                 # API routes
-│   │   │   ├── __init__.py
-│   │   │   ├── destinations.py  # Destination endpoints
-│   │   │   ├── users.py         # User management endpoints
-│   │   │   └── challenges.py    # Friend challenge endpoints
-│   │   ├── core/
-│   │   │   ├── __init__.py
-│   │   │   ├── config.py        # Configuration settings
-│   │   │   └── security.py      # Auth helpers if needed
-│   │   ├── db/
-│   │   │   ├── __init__.py
-│   │   │   ├── database.py      # Database connection
-│   │   │   └── models.py        # Database models
-│   │   ├── schemas/
-│   │   │   ├── __init__.py
-│   │   │   ├── destination.py   # Destination schemas
-│   │   │   └── user.py          # User schemas
-│   │   └── utils/
-│   │       ├── __init__.py
-│   │       └── data_generator.py # AI data generation script
-│   ├── tests/                    # Backend tests
-│   │   ├── __init__.py
-│   │   ├── test_destinations.py
-│   │   └── test_users.py
-│   ├── requirements.txt
-│   └── README.md
-│
-├── frontend/                     # Next.js frontend
-│   ├── public/
-│   │   └── assets/              # Static assets
-│   ├── src/
-│   │   ├── app/                 # Next.js app router
-│   │   │   ├── page.tsx         # Home page
-│   │   │   ├── game/            # Game pages
-│   │   │   └── challenge/       # Challenge pages
-│   │   ├── components/          # React components
-│   │   │   ├── GameBoard.tsx    # Main game component
-│   │   │   ├── Clue.tsx         # Clue display component
-│   │   │   ├── AnswerOptions.tsx # Multiple choice options
-│   │   │   ├── ResultFeedback.tsx # Feedback animations
-│   │   │   ├── ScoreDisplay.tsx # User score component
-│   │   │   └── ChallengeModal.tsx # Friend challenge popup
-│   │   ├── lib/                 # Utility functions
-│   │   │   ├── api.ts           # API client
-│   │   │   └── types.ts         # TypeScript types
-│   │   ├── hooks/               # Custom React hooks
-│   │   │   ├── useGame.ts       # Game state hook
-│   │   │   └── useUser.ts       # User state hook
-│   │   └── styles/              # Global styles
-│   ├── package.json
-│   ├── tsconfig.json
-│   └── README.md
-│
-├── scripts/
-│   └── data_generator.py        # Standalone script for dataset generation
-│
-├── .gitignore
-├── docker-compose.yml           # Container orchestration
-└── README.md                    # Project documentation
