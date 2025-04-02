@@ -45,7 +45,7 @@ export default function useUser() {
 
       setUser((prevUser) => ({
         ...prevUser!,
-        totalScore: prevUser!.totalScore + points,
+        totalScore: prevUser!.score + points,
       }));
 
       // Update the user score on the server

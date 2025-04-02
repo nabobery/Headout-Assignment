@@ -140,11 +140,11 @@ export default function ScoreDisplay({ score }: ScoreDisplayProps) {
         {/* Motivational message */}
         <div className="mt-6 text-center">
           {accuracy >= 90 ? (
-            <p className="text-blue-800 text-sm bg-blue-50 py-2 px-4 rounded-lg">Amazing performance! You're a geography expert!</p>
+            <p className="text-blue-800 text-sm bg-blue-50 py-2 px-4 rounded-lg">Amazing performance! You&apos;re a geography expert!</p>
           ) : accuracy >= 70 ? (
             <p className="text-indigo-800 text-sm bg-indigo-50 py-2 px-4 rounded-lg">Great job! Your global knowledge is impressive.</p>
           ) : accuracy >= 50 ? (
-            <p className="text-purple-800 text-sm bg-purple-50 py-2 px-4 rounded-lg">Good effort! You're building your geography skills.</p>
+            <p className="text-purple-800 text-sm bg-purple-50 py-2 px-4 rounded-lg">Good effort! You&apos;re building your geography skills.</p>
           ) : (
             <p className="text-teal-800 text-sm bg-teal-50 py-2 px-4 rounded-lg">Keep exploring! Every journey begins with a single step.</p>
           )}

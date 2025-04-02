@@ -47,9 +47,14 @@ export default function ChallengeModal({
       // Create the share link
       const baseUrl = window.location.origin;
       setShareLink(`${baseUrl}/challenge/${data.challenge_code}`);
-    } catch (err: any) {
-      console.error("Error creating challenge:", err);
-      setError(err.message || "Something went wrong");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error creating challenge:", err);
+        setError(err.message || "Something went wrong");
+      } else {
+        console.error("Unexpected error:", err);
+        setError("An unexpected error occurred");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -80,18 +85,20 @@ export default function ChallengeModal({
   function shareOnWhatsApp() {
     const text = `I challenge you to beat my score of ${score} points in Globetrotter! Can you guess these destinations? Play here: ${shareLink}`;
     const encodedText = encodeURIComponent(text);
-    
+
     // Detect mobile devices
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+
     // Use the appropriate WhatsApp URL
-    const whatsappUrl = isMobile 
-      ? `whatsapp://send?text=${encodedText}` 
+    const whatsappUrl = isMobile
+      ? `whatsapp://send?text=${encodedText}`
       : `https://web.whatsapp.com/send?text=${encodedText}`;
-    
+
     window.open(whatsappUrl, "_blank");
   }
-  
 
   function copyToClipboard() {
     navigator.clipboard
@@ -152,7 +159,9 @@ export default function ChallengeModal({
           {isLoading ? (
             <div className="text-center py-10">
               <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-              <p className="mt-4 text-gray-600 font-medium">Creating your challenge...</p>
+              <p className="mt-4 text-gray-600 font-medium">
+                Creating your challenge...
+              </p>
             </div>
           ) : error ? (
             <div className="text-center py-8 bg-red-50 rounded-xl p-6">
@@ -172,7 +181,9 @@ export default function ChallengeModal({
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-red-700 mb-2">Unable to Create Challenge</h3>
+              <h3 className="text-lg font-medium text-red-700 mb-2">
+                Unable to Create Challenge
+              </h3>
               <p className="text-gray-700 mb-4">{error}</p>
               <button
                 onClick={createChallenge}
@@ -216,17 +227,28 @@ export default function ChallengeModal({
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold">Globetrotter Challenge</h3>
-                      <p className="text-white/80 text-sm">Ready to test your geography skills?</p>
+                      <h3 className="text-xl font-bold">
+                        Globetrotter Challenge
+                      </h3>
+                      <p className="text-white/80 text-sm">
+                        Ready to test your geography skills?
+                      </p>
                     </div>
                   </div>
 
                   <p className="mb-4 text-white/90 font-medium text-lg">
-                    <span className="font-bold">{username}</span> is challenging you to beat their score of <span className="font-bold text-yellow-300">{score} points</span>!
+                    <span className="font-bold">{username}</span> is challenging
+                    you to beat their score of{" "}
+                    <span className="font-bold text-yellow-300">
+                      {score} points
+                    </span>
+                    !
                   </p>
 
                   <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center border border-white/30">
-                    <p className="text-sm mb-1 text-white/80">Challenge Code:</p>
+                    <p className="text-sm mb-1 text-white/80">
+                      Challenge Code:
+                    </p>
                     <p className="font-mono font-bold text-xl tracking-wider text-white">
                       {challengeCode}
                     </p>
