@@ -7,7 +7,7 @@ from typing import List
 
 router = APIRouter()
 
-@router.post("/", response_model=UserOut)
+@router.post("/auth", response_model=UserOut)
 async def create_user(user: UserCreate, db: AsyncIOMotorDatabase = Depends(get_db)):
     exists = await db["users"].find_one({"username": user.username})
     if exists:
@@ -47,7 +47,7 @@ async def get_user(username: str, db: AsyncIOMotorDatabase = Depends(get_db)):
 #     updated = await db["users"].find_one({"username": username})
 #     return UserOut(**updated)
 
-@router.get("/", response_model=List[LeaderboardEntry])
+@router.get("/leaderboard", response_model=List[LeaderboardEntry])
 async def get_leaderboard(db: AsyncIOMotorDatabase = Depends(get_db)):
     cursor = db["users"].find().sort("score", -1).limit(10)
     users = await cursor.to_list(length=10)

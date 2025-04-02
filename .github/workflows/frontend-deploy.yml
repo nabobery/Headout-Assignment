@@ -1,0 +1,46 @@
+name: Deploy Frontend to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Build and Push Frontend Image
+        working-directory: frontend
+        env:
+          IMAGE_NAME: asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/globetrotter-images/globetrotter-frontend:latest # Define image name once
+        run: |
+          gcloud builds submit . \
+            --config cloudbuild.yaml \
+            --substitutions=_IMAGE_NAME=${IMAGE_NAME},_NEXT_PUBLIC_API_URL='${{ secrets.NEXT_PUBLIC_API_URL }}'
+
+      - name: Deploy Frontend Service
+        env:
+          IMAGE_NAME: asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/globetrotter-images/globetrotter-frontend:latest # Use the same image name
+        run: |
+          gcloud run deploy globetrotter-frontend \
+            --image ${IMAGE_NAME} \
+            --region asia-south1 \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 3000 \
+            --set-env-vars NEXT_PUBLIC_API_URL='${{ secrets.NEXT_PUBLIC_API_URL }}'
