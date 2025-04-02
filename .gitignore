@@ -1,1 +1,8 @@
 .cursor/
+
+### terraform ###
+.terraform*
+*.tfstate*
+crash.log
+override.tf*
+terraform.tfvars
