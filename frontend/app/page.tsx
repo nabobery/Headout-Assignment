@@ -36,7 +36,7 @@ export default function Home() {
     try {
       // Create user or get existing user
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/auth`,
         {
           method: "POST",
           headers: {
