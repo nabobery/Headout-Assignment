@@ -1,0 +1,19 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args: [
+        "build",
+        "--tag",
+        "$_IMAGE_NAME",
+        # Pass the substitution variable as a Docker build argument
+        "--build-arg",
+        "_NEXT_PUBLIC_API_URL=$_NEXT_PUBLIC_API_URL",
+        ".",
+      ]
+# Define substitutions that can be passed in (like _IMAGE_NAME and the one we need)
+substitutions:
+  _IMAGE_NAME: "asia-south1-docker.pkg.dev/your-project-id/your-repo/your-image:tag" # Default/Example - will be overridden
+  _NEXT_PUBLIC_API_URL: "http://default-url.com" # Default/Example - will be overridden
+
+# Specify the image to push after a successful build
+images:
+  - "$_IMAGE_NAME"

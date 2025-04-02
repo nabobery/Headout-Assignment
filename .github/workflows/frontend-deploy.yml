@@ -27,16 +27,21 @@ jobs:
 
       - name: Build and Push Frontend Image
         working-directory: frontend
+        env:
+          IMAGE_NAME: asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/globetrotter-images/globetrotter-frontend:latest # Define image name once
         run: |
-          gcloud builds submit --tag asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/globetrotter-images/globetrotter-frontend \
-            --substitutions=_NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} .
+          gcloud builds submit . \
+            --config cloudbuild.yaml \
+            --substitutions=_IMAGE_NAME=${IMAGE_NAME},_NEXT_PUBLIC_API_URL='${{ secrets.NEXT_PUBLIC_API_URL }}'
 
       - name: Deploy Frontend Service
+        env:
+          IMAGE_NAME: asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/globetrotter-images/globetrotter-frontend:latest # Use the same image name
         run: |
           gcloud run deploy globetrotter-frontend \
-            --image asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/globetrotter-images/globetrotter-frontend \
+            --image ${IMAGE_NAME} \
             --region asia-south1 \
             --platform managed \
             --allow-unauthenticated \
             --port 3000 \
-            --set-env-vars NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+            --set-env-vars NEXT_PUBLIC_API_URL='${{ secrets.NEXT_PUBLIC_API_URL }}'
