@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { User } from "../lib/types";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export default function useUser() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -14,7 +16,7 @@ export default function useUser() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users/${username}`
+        `${API_BASE_URL}/api/users/${username}`
       );
 
       if (!response.ok) {
@@ -51,7 +53,7 @@ export default function useUser() {
       // Update the user score on the server
       try {
         fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/users/${user.username}/score`,
+          `${API_BASE_URL}/api/users/${user.username}/score`,
           {
             method: "POST",
             headers: {

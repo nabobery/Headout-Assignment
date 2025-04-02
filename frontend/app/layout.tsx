@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: "Globetrotter - Geography Quiz Game",
     description:
       "Test your geography knowledge with cryptic clues about famous destinations!",
-    url: "http:localhost:3000",
+    //url: "http:localhost:3000",
     //url: "https://globetrotter-quiz.vercel.app",
     siteName: "Globetrotter",
     images: [

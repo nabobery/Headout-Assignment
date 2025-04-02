@@ -28,7 +28,8 @@ jobs:
       - name: Build and Push Frontend Image
         working-directory: frontend
         run: |
-          gcloud builds submit --tag asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/globetrotter-images/globetrotter-frontend .
+          gcloud builds submit --tag asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/globetrotter-images/globetrotter-frontend \
+            --substitutions=_NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} .
 
       - name: Deploy Frontend Service
         run: |
