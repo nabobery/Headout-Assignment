@@ -32,7 +32,7 @@ async function fetchAPI<T>(
  */
 export const userAPI = {
   create: (username: string) =>
-    fetchAPI("/api/users", {
+    fetchAPI("/api/users/auth", {
       method: "POST",
       body: JSON.stringify({ username }),
     }),
@@ -45,7 +45,7 @@ export const userAPI = {
   //     body: JSON.stringify({ points }),
   //   }),
 
-  getLeaderboard: () => fetchAPI("/api/leaderboard"),
+  getLeaderboard: () => fetchAPI("/api/users/leaderboard"),
 };
 
 /**
